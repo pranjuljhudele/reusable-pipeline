@@ -1,0 +1,31 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- main
+
+variables:
+  helmVersion: '2.14.1'
+  kubectlVersion: v1.12.1
+  nodeVersionSpec: 10.x
+
+stages:
+  - template: shared-pipeline.yaml
+    parameters:
+      windowsAgentPool: 'windows-latest'
+      buildType: 'java'
+      projectName: 'java-project'
+      initSteps: []
+      codeRootDir: build/java
+      buildMavenSettingsFile: build/java/app/pom.xml
+      CI: {
+        enabled: true,
+        azureContainerRegistry: 'admcoeacr', 
+        azureSubscription: 'azure-service-connection',
+        azureContainerRegistryName: 'admcoeacr',
+        scan: true,
+        gate: true,
+      }
+

@@ -1,0 +1,25 @@
+parameters:
+  windowsAgentPool: ''
+  buildType: ''
+  projectName: ''
+  codeRootDir: ''
+  deployType: ''
+
+  CI: {
+    enabled: '',
+    azureSubscription: ''
+     }
+
+stages:
+    - ${{if eq(parameters.CI.enabled, 'true')}}:
+      - stage: 'CI'
+        displayName: 'Continuous Integration'
+        jobs:
+            - job: CIJob
+              displayName: Building Testing Packaging and publishing artifacts
+              
+              steps:
+                - template: build/build-project.yaml
+                  parameters:
+                   codeRootDir: ${{parameters.codeRootDir}}
+   
